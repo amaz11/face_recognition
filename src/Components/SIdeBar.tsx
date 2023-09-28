@@ -26,6 +26,12 @@ const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
               PSC Exam
             </Link>
           </li>
+          <li>
+            <Link className="flex items-center gap-3" to="/login">
+              <AiOutlineTeam size={22} />
+              Login Page
+            </Link>
+          </li>
         </ul>
       </div>
     </div>

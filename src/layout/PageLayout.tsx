@@ -8,7 +8,7 @@ const PageLayout = () => {
   return (
     <div>
       <div
-        className={`fixed bg-white border-r top-0 left-0 w-[250px] h-full z-10 transition-all duration-700 ${
+        className={`fixed text-white border-r top-0 left-0 w-[250px] h-full z-10 transition-all duration-700  bg-[#051725] ${
           sideBarTogle ? "ml-[-250px] " : ""
         }`}
       >
@@ -23,7 +23,7 @@ const PageLayout = () => {
         } transition-all duration-700`}
       >
         <Navbar sideBarTogle={sideBarTogle} setsideBarTogle={setsideBarTogle} />
-        <div className="px-4 pt-4">
+        <div className="px-4 pt-4  bg-[#051725] text-white h-[100%]">
           <Outlet />
         </div>
         {sideBarTogle ? null : (

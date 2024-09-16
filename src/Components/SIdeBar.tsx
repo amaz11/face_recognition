@@ -5,11 +5,11 @@ import { SideBarControllType } from "../utils/types/Types";
 
 const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
   return (
-    <div className="p-4 relative">
-      <div className="block md:hidden absolute top-0 right-2">
+    <div className="relative p-4">
+      <div className="block top-0 right-2 absolute md:hidden">
         <RxCross2 size={18} onClick={() => setsideBarTogle(!sideBarTogle)} />
       </div>
-      <div className="font-bold text-center text-[clamp(10px,5.6vw,24px)]">
+      <div className="font-bold text-[clamp(10px,5.6vw,24px)] text-center">
         Face Recognition
       </div>
       <div className="pt-5">
@@ -24,12 +24,6 @@ const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
             <Link className="flex items-center gap-3" to="/psc-exam">
               <AiOutlineTeam size={22} />
               PSC Exam
-            </Link>
-          </li>
-          <li>
-            <Link className="flex items-center gap-3" to="/login">
-              <AiOutlineTeam size={22} />
-              Login Page
             </Link>
           </li>
         </ul>

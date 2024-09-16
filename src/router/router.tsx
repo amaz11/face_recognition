@@ -3,11 +3,12 @@ import Home from "../pages/Home";
 import LoginPage from "../pages/LoginPage";
 import PageLayout from "../layout/PageLayout";
 import PSCExam from "../pages/PSCExam";
+import AdminAuthHOC from "../utils/hoc/AdminAuth";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <PageLayout />,
+    element: <AdminAuthHOC><PageLayout /></AdminAuthHOC>,
     children: [
       {
         index: true,

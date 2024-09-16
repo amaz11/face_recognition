@@ -5,15 +5,19 @@ import { SideBarControllType } from "../utils/types/Types";
 
 const Navbar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
   return (
-    <div className="flex justify-between items-center px-4 py-3 shadow-sm">
+    <div className="flex justify-between items-center px-4 py-3 shadow-sm bg-[#051725] border-b">
       <span>
         {sideBarTogle ? (
           <RiBarChartHorizontalFill
             size={18}
             onClick={() => setsideBarTogle(!sideBarTogle)}
+            className='text-white'
           />
         ) : (
-          <FaBars size={18} onClick={() => setsideBarTogle(!sideBarTogle)} />
+          <FaBars size={18} onClick={() => setsideBarTogle(!sideBarTogle)} 
+          className='text-white'
+          
+          />
         )}
       </span>
       <div className="flex items-center gap-3">

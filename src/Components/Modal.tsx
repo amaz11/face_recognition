@@ -1,26 +1,27 @@
 import { RxCross2 } from "react-icons/rx";
 import { ModalType } from "../utils/types/Types";
-import { useState } from "react";
 
-const Modal = ({ title, children }: ModalType) => {
-  const [modalToggle, setModalToggle] = useState(false);
+const Modal = ({ title, children, modalToggle, setModalToggle, buttonName, classcss, icon }: ModalType) => {
   return (
     <>
       <div className="flex justify-end px-4">
         <button
-          className="bg-blue-500 py-1.5 px-2 rounded font-semibold text-white"
+          className={`${classcss === undefined || null ? 'bg-[#1d69fa] text-white flex items-center gap-2 px-4 py-2 rounded-full' : classcss}`}
           onClick={() => setModalToggle(!modalToggle)}
         >
-          File Upload
+          {icon === undefined || null ? null : icon}
+          <span className='font-semibold'>
+            {buttonName}
+          </span>
         </button>
       </div>
       {modalToggle ? (
         <>
           <div
-            className="bg-black opacity-40 fixed w-full h-full top-0 left-0 z-10"
+            className="top-0 left-0 z-10 fixed bg-black opacity-40 w-full h-full"
             onClick={() => setModalToggle(!modalToggle)}
           ></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded p-4 z-10 w-1/4 overflow-hidden">
+          <div className="top-1/2 left-1/2 z-10 absolute bg-white p-4 rounded w-1/4 text-slate-700 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden">
             <div className="flex justify-between mb-3">
               <h3 className="font-semibold text-lg">{title}</h3>
               <RxCross2

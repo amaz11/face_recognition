@@ -29,6 +29,20 @@ const endPointAPI = baseApi.injectEndpoints({
                 tags ? tags.map(tag => ({ type: tag as string })) : [] as any,
         }),
 
+        postFile: builder.mutation<any, { endpoint: string, data: any, tags?: string[] }>({
+            query: (data: { endpoint: string, data: any }) => ({
+                url: `${data.endpoint}`,
+                method: "POST",
+                body: data.data,
+                headers: {
+                    Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+
+                },
+            }),
+            invalidatesTags: (_result: any, _error: FetchBaseQueryError | undefined, { tags }: { endpoint: string; data: any; tags?: string[] | undefined; }) =>
+                tags ? tags.map(tag => ({ type: tag as string })) : [] as any,
+        }),
+
         deleteData: builder.mutation<any, { endpoint: string, tags?: string[] }>(
             {
                 query: (data: { endpoint: string }) => ({
@@ -63,4 +77,4 @@ const endPointAPI = baseApi.injectEndpoints({
     })
 })
 
-export const { useGetDataQuery, usePostDataMutation, useDeleteDataMutation, useUpdateDataMutation } = endPointAPI
+export const { useGetDataQuery, usePostDataMutation, useDeleteDataMutation, useUpdateDataMutation, usePostFileMutation } = endPointAPI

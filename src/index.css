@@ -1,3 +1,77 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    h1 {
+        @apply text-xl md:text-2xl lg:text-3xl;
+    }
+
+    h2 {
+        @apply text-sm md:text-base lg:text-lg;
+    }
+
+    h3 {
+        @apply text-2xl md:text-2xl font-bold;
+    }
+
+    h5 {
+        @apply text-xs md:text-sm lg:text-base font-bold;
+    }
+
+    p {
+        @apply text-xs md:text-sm lg:text-base;
+    }
+
+    span {
+        @apply text-xs md:text-sm lg:text-base;
+    }
+
+    .submit-btn-div {
+        @apply flex justify-center items-center mt-8 mb-4;
+    }
+
+    .btn-primary {
+        @apply bg-[#1d69fa] text-white flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:bg-[#1d6afaf3];
+    }
+
+    .btn-denger {
+        @apply bg-red-500 text-white flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:bg-red-600;
+    }
+
+    .btn-gray {
+        @apply bg-slate-400 text-white flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:bg-slate-500;
+    }
+
+    .btn-success {
+        @apply bg-green-500 text-white flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:bg-green-600;
+    }
+
+    .submit-btn {
+        @apply px-10 py-1.5 font-semibold;
+    }
+
+    .flex-ic-jc {
+        @apply flex items-center justify-center;
+    }
+
+    .flex-ic-jb {
+        @apply flex items-center justify-between;
+    }
+
+    .grid-c4c2c1 {
+        @apply grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-4;
+    }
+
+    .sidebarDot {
+        @apply w-1 h-1 bg-blue-400 rounded-full;
+    }
+
+    .inputFild {
+        @apply border border-slate-500 py-2 rounded pl-3 focus:outline-blue-500;
+    }
+
+    .tableDropDownList {
+        @apply py-2 px-6 cursor-pointer hover:bg-slate-100 font-medium border-b;
+    }
+}

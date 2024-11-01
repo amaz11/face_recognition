@@ -1,0 +1,18 @@
+th[data-pinned="true"]::before {
+    background-color: white !important;
+    box-shadow: none !important;
+}
+
+td[data-pinned="true"]::before {
+    background-color: white !important;
+    box-shadow: none !important;
+}
+
+ul {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+        left: 760px !important;
+  } */

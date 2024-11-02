@@ -54,6 +54,8 @@ const AddTeacher = ({ id }: { id: any }) => {
             if (file?.length === 0 || formData.examLogId.length === 0) {
                 toast.error("Please enter a file or Select Exam Date")
             }
+            console.log(file);
+            console.log(formData);
             const res = await postData({
                 endpoint: "/teachers",
                 data: formData,
@@ -130,6 +132,7 @@ const AddTeacher = ({ id }: { id: any }) => {
                                 </div>
                                 : null}
                         </div>
+                        <button>Submit</button>
                     </div>
                 </form>
             </Modal>

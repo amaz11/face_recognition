@@ -1,10 +1,11 @@
-import { useState } from "react"
-import useModalHooks from "../../../../utils/hooks/modalHooks"
-import Modal from "../../../Modal"
+import { useEffect, useState } from "react";
+import useModalHooks from "../../../utils/hooks/modalHooks";
+import { useUpdateDataMutation } from "../../../service/endpoint";
+import { toast } from "react-toastify";
+import UpdateModal from "../UpdateModal";
+import InputField from "../../textfield/InputField";
 import { MdDriveFileRenameOutline, MdWork, MdEmail, MdPhone, MdHome } from 'react-icons/md';
-import { usePostDataMutation } from "../../../../service/endpoint"
-import { toast } from "react-toastify"
-import InputField from "../../../textfield/InputField"
+
 
 interface TeacherFormData {
     name: string;
@@ -13,9 +14,9 @@ interface TeacherFormData {
     phone: string;
     address?: string;
 }
+const UpdateTeacher = ({ id, row }: { id: any, row: any }) => {
+    const [updateData, { isLoading }] = useUpdateDataMutation()
 
-const AddTeacher = () => {
-    const [postData, { isLoading }] = usePostDataMutation();
     const { modalToggle, setModalToggle } = useModalHooks();
     const [formData, setFormData] = useState<TeacherFormData>({
         name: '',
@@ -72,7 +73,7 @@ const AddTeacher = () => {
                 if (numberPatterMatch && value.length === 11) {
                     setFormErrorData((prev: any) => ({
                         ...prev,
-                        phone: "",
+                        phone_no: "",
                     }));
                 } else if (
                     numberPatterMatch &&
@@ -80,12 +81,12 @@ const AddTeacher = () => {
                 ) {
                     setFormErrorData((prev: any) => ({
                         ...prev,
-                        phone: "Please provide 11 digit phone number.",
+                        phone_no: "Please provide 11 digit phone number.",
                     }));
                 } else {
                     setFormErrorData((prev: any) => ({
                         ...prev,
-                        phone: "Please provide numeric number.",
+                        phone_no: "Please provide numeric number.",
                     }));
                 }
                 break;
@@ -170,7 +171,6 @@ const AddTeacher = () => {
         }
         return !hasError;
     }
-
     const closeAndresetForm = () => {
         setFormData({
             name: '',
@@ -187,102 +187,110 @@ const AddTeacher = () => {
         })
         setModalToggle(false);
     }
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const checkFormError = errorFromHandler();
 
         if (checkFormError)
             try {
-                const res = await postData({
-                    endpoint: "teachers/teacher",
+                const res = await updateData({
+                    endpoint: `teachers/${id}`,
                     data: formData,
                     tags: ["teacher"],
                 }).unwrap();
                 if (res?.success) {
                     toast.success(res?.message);
+                    closeAndresetForm()
                 }
-                closeAndresetForm();
-            } catch (error: any) {
 
+            } catch (error: any) {
+                toast.error(error.error.message)
             }
     };
+    useEffect(() => {
+        setFormData({
+            name: row.name || '',
+            positions: row.positions || '',
+            email: row.email || '',
+            phone: row.phone || '',
+            address: row.address || '',
+        })
+    }, [])
     return (
-        <div>
-            <Modal title="Add Teacher" modalToggle={modalToggle} setModalToggle={setModalToggle} buttonName="Add Teacher" >
-                <form onSubmit={handleSubmit}>
-                    <InputField
-                        label="Name"
-                        type="text"
-                        Icon={MdDriveFileRenameOutline}
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        star={true}
-                        error={formErrorData.name}
+        <div> <UpdateModal title="Update Teacher" modalToggle={modalToggle} setModalToggle={setModalToggle} >
+            <form onSubmit={handleSubmit}>
+                <InputField
+                    label="Name"
+                    type="text"
+                    Icon={MdDriveFileRenameOutline}
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    star={true}
+                    error={formErrorData.name}
 
-                    />
+                />
 
-                    <InputField
-                        label="Position"
-                        type="text"
-                        Icon={MdWork}
-                        name="positions"
-                        value={formData.positions}
-                        onChange={handleChange}
-                        star={true}
-                        error={formErrorData.positions}
+                <InputField
+                    label="Position"
+                    type="text"
+                    Icon={MdWork}
+                    name="positions"
+                    value={formData.positions}
+                    onChange={handleChange}
+                    star={true}
+                    error={formErrorData.positions}
 
-                    />
+                />
 
-                    <InputField
-                        label="Email"
-                        type="email"
-                        Icon={MdEmail}
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        star={true}
-                        error={formErrorData.email}
+                <InputField
+                    label="Email"
+                    type="email"
+                    Icon={MdEmail}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    star={true}
+                    error={formErrorData.email}
+                    disabled={true}
+                />
 
-                    />
+                <InputField
+                    label="Phone"
+                    type="tel"
+                    Icon={MdPhone}
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    star={true}
+                    error={formErrorData.phone}
 
-                    <InputField
-                        label="Phone"
-                        type="tel"
-                        Icon={MdPhone}
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        star={true}
-                        error={formErrorData.phone}
+                />
 
-                    />
+                <InputField
+                    label="Address"
+                    type="text"
+                    Icon={MdHome}
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    star={false}
+                />
 
-                    <InputField
-                        label="Address"
-                        type="text"
-                        Icon={MdHome}
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        star={false}
-                    />
+                <div className="flex justify-center">
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full text-white"
+                        disabled={isLoading}
+                    >
+                        Create Teacher
+                    </button>
+                </div>
 
-                    <div className="flex justify-center">
-                        <button
-                            type="submit"
-                            className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full text-white"
-                            disabled={isLoading}
-                        >
-                            Create Teacher
-                        </button>
-                    </div>
-
-                </form>
-            </Modal>
+            </form>
+        </UpdateModal>
         </div>
     )
 }
 
-export default AddTeacher
+export default UpdateTeacher

@@ -37,7 +37,7 @@ const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
 
   return (
     <div className="relative p-4">
-      <div className="block top-0 right-2 absolute md:hidden">
+      <div className="md:hidden block top-0 right-2 absolute">
         <RxCross2 size={18} onClick={() => setsideBarTogle(!sideBarTogle)} />
       </div>
       <div className="font-bold text-[clamp(10px,5.6vw,24px)] text-center">
@@ -67,6 +67,12 @@ const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
             <Link className="flex items-center gap-3" to="/exam-logs">
               <AiOutlineTeam size={22} />
               Exam-Logs
+            </Link>
+          </li>
+          <li>
+            <Link className="flex items-center gap-3" to="/teachers">
+              <AiOutlineTeam size={22} />
+              Teachers
             </Link>
           </li>
           <li>
@@ -111,7 +117,6 @@ const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
                         : "h-0 overflow-hidden p-0"
                         } transition-all duration-500  bg-slate-700 rounded flex flex-col gap-2`}>
                         <Link to={`students/${exam.id}/${exam.name.toLowerCase().replaceAll(/\s/g, '')}`}><span>Student</span></Link>
-                        <Link to={`teacher/${exam.id}`}><span>Teacher</span></Link>
                       </div>
                     </div>)
                 }

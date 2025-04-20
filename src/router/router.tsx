@@ -8,7 +8,9 @@ import Exams from "../pages/Exams/Exams";
 import ExamTypes from "../pages/ExamTypes/ExamTypes";
 import ExamLogs from "../pages/ExamLogs/ExamLogs";
 import Students from "../pages/Students/Students";
-import Teacher from "../pages/Teacher/Teacher";
+import Teachers from "../pages/teachers/Teachers";
+import HallRoom from "../pages/hallroom/HallRoom";
+
 
 export const router = createBrowserRouter([
   {
@@ -40,8 +42,12 @@ export const router = createBrowserRouter([
         element: <Students />,
       },
       {
-        path: "/teacher/:examId",
-        element: <Teacher />,
+        path: "/teachers",
+        element: <Teachers />,
+      },
+      {
+        path: "/exam-hall",
+        element: <HallRoom />,
       },
     ],
   },

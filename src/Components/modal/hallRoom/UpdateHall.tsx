@@ -139,7 +139,7 @@ const UpdateInstitutionForm = ({ id, row }: { id: any, row: any }) => {
             address: row.address || '',
             eiin: row.eiin || '',
         })
-    }, [])
+    }, [modalToggle])
     return (
         <UpdateModal title="Update Teacher" modalToggle={modalToggle} setModalToggle={setModalToggle} >
             <form onSubmit={handleSubmit} className="space-y-4 p-4">

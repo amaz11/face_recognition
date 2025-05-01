@@ -70,6 +70,12 @@ const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
             </Link>
           </li>
           <li>
+            <Link className="flex items-center gap-3" to="/exam-hall">
+              <AiOutlineTeam size={22} />
+              Hall Room
+            </Link>
+          </li>
+          <li>
             <Link className="flex items-center gap-3" to="/teachers">
               <AiOutlineTeam size={22} />
               Teachers

@@ -11,7 +11,7 @@ export const DeleteModal = ({
 }: {
     tags: string[];
     endpoint: string;
-    refetch: () => void;
+    refetch?: () => void;
 }) => {
     const [deleteData, { isLoading }] = useDeleteDataMutation();
     const [modalToggle, setModalToggle] = useState(false);
@@ -23,7 +23,9 @@ export const DeleteModal = ({
             }).unwrap();
             if (res?.success) {
                 setModalToggle(false);
-                refetch();
+                if (refetch) {
+                    refetch();
+                }
                 toast.success(res?.message);
             } else {
                 toast.error(res?.error?.data.message);
@@ -35,7 +37,7 @@ export const DeleteModal = ({
     return (
         <>
             <div
-                className="flex-ic-jc tableDropDownList border-b-0 gap-3"
+                className="tableDropDownList flex-ic-jc gap-3 border-b-0"
                 onClick={() => {
                     setModalToggle(!modalToggle);
                 }}
@@ -44,7 +46,7 @@ export const DeleteModal = ({
                 <span>Delete</span>
             </div>
             {modalToggle ? (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-auto">
+                <div className="z-[60] fixed inset-0 flex justify-center items-center overflow-auto">
                     <div
                         className="fixed inset-0 bg-black opacity-40"
                         onClick={() => setModalToggle(!modalToggle)}
@@ -60,13 +62,13 @@ export const DeleteModal = ({
                             />
                         </div>
                         <div className="">
-                            <div className="flex items-center justify-between space-x-4">
-                                <h1 className="text-xl font-bold text-gray-800 ">
+                            <div className="flex justify-between items-center space-x-4">
+                                <h1 className="font-bold text-gray-800 text-xl">
                                     Are you sure delete?
                                 </h1>
                             </div>
 
-                            <p className="mt-2 text-md text-gray-800">
+                            <p className="mt-2 text-gray-800 text-md">
                                 If you continue, you will permanently delete this record. Are
                                 you sure you want to continue?
                             </p>
@@ -77,7 +79,7 @@ export const DeleteModal = ({
                                         setModalToggle(!modalToggle);
                                     }}
                                     type="button"
-                                    className="mr-2 px-2 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-500 hover:bg-gray-600 rounded-md shadow-md"
+                                    className="bg-gray-500 hover:bg-gray-600 shadow-md mr-2 px-2 py-2 rounded-md text-white text-sm capitalize tracking-wide transition-colors duration-200 transform"
                                 >
                                     Back
                                 </button>
@@ -85,7 +87,7 @@ export const DeleteModal = ({
                                     onClick={() => handleDelete()}
                                     disabled={isLoading || false}
                                     type="button"
-                                    className="mr-2 px-2 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-500 hover:bg-red-600 rounded-md shadow-md"
+                                    className="bg-red-500 hover:bg-red-600 shadow-md mr-2 px-2 py-2 rounded-md text-white text-sm capitalize tracking-wide transition-colors duration-200 transform"
                                 >
                                     Delete
                                 </button>

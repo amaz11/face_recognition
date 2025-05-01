@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import UpdateModal from "../UpdateModal";
 import { useGetDataQuery, useUpdateDataMutation } from "../../../service/endpoint";
 import { toast } from "react-toastify";
-import useModalHooks from "../../../utils/hooks/modalHooks";
 import InputField from "../../textfield/InputField";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 
 
-const UpdateRoom = ({ id, row }: { id: any, row: any }) => {
+const UpdateRoom = ({ row, modalToggle, setModalToggle }: { row: any, modalToggle: boolean, setModalToggle: any }) => {
     const {
         data,
         isLoading: dataIsLoading,
@@ -15,7 +14,6 @@ const UpdateRoom = ({ id, row }: { id: any, row: any }) => {
         error,
     } = useGetDataQuery({ endpoint: "exam_hall", tags: ['exam_hall'] });
     const [updateData, { isLoading }] = useUpdateDataMutation()
-    const { modalToggle, setModalToggle } = useModalHooks();
 
     const [formData, setFormData] = useState({
         roomNo: '',
@@ -36,7 +34,7 @@ const UpdateRoom = ({ id, row }: { id: any, row: any }) => {
 
         try {
             const res = await updateData({
-                endpoint: `exam_hall/${id}`,
+                endpoint: `exam_hall/${row.id}`,
                 data: formData,
                 tags: ["exam_hall"],
             }).unwrap();

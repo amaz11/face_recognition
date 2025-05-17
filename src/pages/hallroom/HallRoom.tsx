@@ -48,14 +48,14 @@ const HallRoom = () => {
             return (
                 <Stack direction="row" spacing={1} rowGap={2} flexWrap="wrap" padding={2}>
                     {hallRooms.map((room: any) => (
-                        <Box onClick={(e) => {
+                        <Box key={room.id} onClick={(e) => {
                             e.stopPropagation()
                             setCurrentData(room)
                             setModalToggle(true)
                         }}>
 
                             <Chip
-                                key={room.id}
+
                                 label={`Room ${room.roomNo} (Capacity: ${room.capacity})`}
                                 color="primary"
                                 variant="outlined"

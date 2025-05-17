@@ -123,6 +123,7 @@ const SideBar = ({ sideBarTogle, setsideBarTogle }: SideBarControllType) => {
                         : "h-0 overflow-hidden p-0"
                         } transition-all duration-500  bg-slate-700 rounded flex flex-col gap-2`}>
                         <Link to={`students/${exam.id}/${exam.name.toLowerCase().replaceAll(/\s/g, '')}`}><span>Student</span></Link>
+                        <Link to={`seat-plan/${exam.id}/${exam.name.toLowerCase().replaceAll(/\s/g, '')}`}><span>Seat Plan</span></Link>
                       </div>
                     </div>)
                 }

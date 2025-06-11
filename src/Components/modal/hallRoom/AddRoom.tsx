@@ -36,7 +36,7 @@ const AddRoom = () => {
     e.preventDefault();
     try {
       const res = await postData({
-        endpoint: "hall_rooms",
+        endpoint: "exam_hall/hall_rooms",
         data: formData,
         tags: ["exam_hall"],
       }).unwrap();
@@ -68,7 +68,7 @@ const AddRoom = () => {
               Hall
             </label>
             <select
-              name="employee_designation_id"
+              name="hallId"
               value={formData.hallId}
               onChange={handleSelectChange}
               className="px-3 py-2 border border-slate-500 rounded focus:outline-[#1d69fa]"

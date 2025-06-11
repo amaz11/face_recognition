@@ -105,7 +105,7 @@ const AddRoom = () => {
             star={true}
           />
           <InputField
-            label="Exam"
+            label="Room Capacity"
             type="number"
             min={1}
             Icon={MdDriveFileRenameOutline}

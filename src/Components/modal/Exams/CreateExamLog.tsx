@@ -63,7 +63,7 @@ const CreateExamsLogs = () => {
         title="Create Exam Type"
         modalToggle={modalToggle}
         setModalToggle={setModalToggle}
-        buttonName="Create Exam-log"
+        buttonName="Create Exam log"
       >
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col">

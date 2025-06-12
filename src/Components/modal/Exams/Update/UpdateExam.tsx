@@ -49,7 +49,7 @@ const UpdateExam = ({ id, row }: { id: any; row: any }) => {
   return (
     <div>
       <UpdateModal
-        title="Create Exam Type"
+        title="Update Exam"
         modalToggle={modalToggle}
         setModalToggle={setModalToggle}
         buttonName="Edit"

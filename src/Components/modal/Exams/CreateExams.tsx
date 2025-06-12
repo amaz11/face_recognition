@@ -49,7 +49,7 @@ const CreateExams = () => {
   return (
     <div>
       <Modal
-        title="Create Exam Type"
+        title="Create Exam"
         modalToggle={modalToggle}
         setModalToggle={setModalToggle}
         buttonName="Add Exam"

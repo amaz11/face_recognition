@@ -51,9 +51,14 @@ const CreateSeatPlan = () => {
     isLoading: isteachersLoading,
     isError: _isteachersError,
     error: _teachersError,
-  } = useGetDataQuery({ endpoint: `admin/all-teacher` });
+  } = useGetDataQuery(
+    { endpoint: `admin/all-teacher` },
+    {
+      skip: formData.examScheduleId === undefined,
+    }
+  );
 
-  const studentOptions = studentsData?.data?.student_exam_log || [];
+  const studentOptions = studentsData?.data || [];
   const teacherOptions = teachersData?.data || [];
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -133,8 +133,8 @@ const CreateSeatPlan = () => {
         }).unwrap();
 
         if (res?.ok) {
-          toast.success(res?.message);
           navigate(-1);
+          toast.success(res?.message);
         }
       }
     } catch (error) {

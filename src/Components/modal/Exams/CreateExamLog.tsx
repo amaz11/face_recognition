@@ -15,7 +15,7 @@ const CreateExamsLogs = () => {
     isLoading: dataIsLoading,
     isError,
     error,
-  } = useGetDataQuery({ endpoint: "examsType" });
+  } = useGetDataQuery({ endpoint: "exams" });
   const [postData, { isLoading }] = usePostDataMutation();
   const [formData, setFormData] = useState({
     exam_year: "",
@@ -25,6 +25,7 @@ const CreateExamsLogs = () => {
     exam_start: "",
     exam_end: "",
   });
+
   const { modalToggle, setModalToggle } = useModalHooks();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

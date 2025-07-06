@@ -3,6 +3,7 @@ import { useGetDataQuery, usePostDataMutation } from "../../service/endpoint";
 import { useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { toast } from "react-toastify";
+import Loader from "../../Components/loader/Loader";
 
 const CreateSeatPlan = () => {
   const { examId } = useParams();
@@ -17,7 +18,7 @@ const CreateSeatPlan = () => {
     isLoading: isHallRoomLoading,
     isError: _isHallRoomError,
     error: _hallRoomError,
-  } = useGetDataQuery({ endpoint: "exam_hall", tags: ["exam_hall"] });
+  } = useGetDataQuery({ endpoint: "exam_hall", tags: ["seat-plan"] });
 
   const [formData, setFormData] = useState<any>({
     hallId: "none",
@@ -40,7 +41,10 @@ const CreateSeatPlan = () => {
     isError: _isStudentError,
     error: _StudentError,
   } = useGetDataQuery(
-    { endpoint: `admin/students/exam-log/${formData.examScheduleId}` },
+    {
+      endpoint: `admin/students/exam-log/${formData.examScheduleId}`,
+      tags: ["seat-plan"],
+    },
     {
       skip: formData.examScheduleId === undefined,
     }
@@ -52,7 +56,10 @@ const CreateSeatPlan = () => {
     isError: _isteachersError,
     error: _teachersError,
   } = useGetDataQuery(
-    { endpoint: `admin/all-teacher` },
+    {
+      endpoint: `admin/all-teacher/${formData.examScheduleId}`,
+      tags: ["seat-plan"],
+    },
     {
       skip: formData.examScheduleId === undefined,
     }
@@ -169,7 +176,9 @@ const CreateSeatPlan = () => {
           formData.examScheduleId === "none" ||
           isError ? (
             <span className="pt-2 text-red-400">
-              {error || formErrorData.examScheduleId}
+              {isError
+                ? error?.message || "Failed to load data."
+                : formErrorData.examScheduleId}
             </span>
           ) : null}
         </div>
@@ -202,7 +211,9 @@ const CreateSeatPlan = () => {
             </select>
             {formData.hallId === "none" || formData.hallId === undefined ? (
               <span className="pt-2 text-red-400">
-                {error || formErrorData.hallId}
+                {isError
+                  ? error?.message || "Something went wrong."
+                  : formErrorData.hallRoomId}
               </span>
             ) : null}
           </div>
@@ -301,6 +312,11 @@ const CreateSeatPlan = () => {
           </button>
         </div>
       </form>
+      {(isLoading ||
+        isPostLoading ||
+        isStudentsLoading ||
+        isteachersLoading ||
+        isHallRoomLoading) && <Loader />}
     </div>
   );
 };

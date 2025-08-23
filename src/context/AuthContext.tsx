@@ -1,44 +1,63 @@
-import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
-
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { isExpired } from "../utils/auth";
+import { useLocation } from "react-router-dom";
+import { useRouteChangeKey } from "../utils/hooks/pathHook";
 
 interface AuthContextType {
-    token: string;
-    isAuthenticated: boolean;
-    loading: boolean;
-    setToken: Dispatch<SetStateAction<string>>;
-    // setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
-    // setLoading: Dispatch<SetStateAction<boolean>>;
+  token: string;
+  isAuthenticated: boolean;
+  loading: boolean;
+  setToken: Dispatch<SetStateAction<string>>;
+  // setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+  // setLoading: Dispatch<SetStateAction<boolean>>;
 }
 const defaultAuthValue: AuthContextType = {
-    token: '',
-    isAuthenticated: false,
-    loading: false,
-    setToken: () => { },
-}
+  token: "",
+  isAuthenticated: false,
+  loading: false,
+  setToken: () => {},
+};
 
-export const AuthContext = createContext<AuthContextType>(defaultAuthValue)
+export const AuthContext = createContext<AuthContextType>(defaultAuthValue);
 
 const AuthUser = ({ children }: { children: React.ReactNode }) => {
-    const [token, setToken] = useState<string>('')
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
-    const ls: Storage | null = typeof window !== 'undefined' ? window.localStorage : null
-    useEffect(() => {
-        const token = ls!.getItem('X_FR_token')
-        if (token!?.length >= 15) {
-            setToken(token!);
-            setIsAuthenticated(true)
-            setLoading(false)
-        } else {
-            setLoading(false)
-            return
-        }
-    }, [])
+  const [token, setToken] = useState<string>("");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const ls: Storage | null =
+    typeof window !== "undefined" ? window.localStorage : null;
+  const routeKey = useRouteChangeKey();
 
+  useEffect(() => {
+    const token = ls!.getItem("X_FR_token") || "";
+    if (token!?.length >= 15 && !isExpired(token)) {
+      setToken(token!);
+      setIsAuthenticated(true);
+      setLoading(false);
+    } else {
+      setLoading(false);
+      return;
+    }
+    if (isExpired(token)) {
+      ls!.removeItem("X_FR_token");
+      setToken("");
+      setIsAuthenticated(false);
+      window.location.replace("/login");
+      return;
+    }
+  }, [routeKey]);
 
-    return <AuthContext.Provider value={{ token, isAuthenticated, loading, setToken }}>
-        {children}
+  return (
+    <AuthContext.Provider value={{ token, isAuthenticated, loading, setToken }}>
+      {children}
     </AuthContext.Provider>
-}
+  );
+};
 
-export default AuthUser
+export default AuthUser;

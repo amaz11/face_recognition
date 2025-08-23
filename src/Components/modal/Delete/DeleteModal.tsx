@@ -62,7 +62,7 @@ export const DeleteModal = ({
             <div className="flex justify-between mb-3">
               <h3 className="font-semibold text-lg"></h3>
               <RxCross2
-                onClick={(e) => {
+                onClick={(e: any) => {
                   e.stopPropagation();
                   setModalToggle(!modalToggle);
                 }}

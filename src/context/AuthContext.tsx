@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import { isExpired } from "../utils/auth";
-import { useLocation } from "react-router-dom";
 import { useRouteChangeKey } from "../utils/hooks/pathHook";
 
 interface AuthContextType {

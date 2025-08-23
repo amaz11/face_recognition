@@ -8,7 +8,6 @@ export const DeleteModal = ({
   tags,
   endpoint,
   refetch,
-  setCurrentModal,
 }: {
   tags: string[];
   endpoint: string;

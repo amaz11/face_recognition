@@ -2,12 +2,13 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getTokenFromLocalStorage } from '../../utils/getToken';
 
 const baseQueryWithMeta = fetchBaseQuery({
-    baseUrl: 'http://localhost:8000/v1/', // Adjust the base URL as needed
+    baseUrl: 'https://6abc671c084b.ngrok-free.app/v1/' , // Adjust the base URL as needed || 'http://localhost:8000/v1/'
     prepareHeaders: (headers) => {
         const token = getTokenFromLocalStorage();
         if (token) {
             headers.set('Authorization', `Bearer ${token}`);
         }
+        headers.set("ngrok-skip-browser-warning", "true", );
         return headers;
     },
 });

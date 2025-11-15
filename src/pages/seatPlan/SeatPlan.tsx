@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import PageHeader from "../../Components/PageHeader";
 
 const SeatPlan = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -32,8 +33,17 @@ const SeatPlan = () => {
     endpoint: `admin/exam-log/${examId}`,
     tags: ["seat-plan"],
   });
-  console.log(data);
   const navigate = useNavigate();
+  const schedules = data?.data ?? [];
+  const totalSessions = schedules.length;
+  const totalTeachers = schedules.reduce(
+    (sum: number, session: any) => sum + (session?.teachers_log?.length ?? 0),
+    0
+  );
+  const totalStudents = schedules.reduce(
+    (sum: number, session: any) => sum + (session?.student_exam_log?.length ?? 0),
+    0
+  );
   const columns = [
     {
       accessorKey: "exam_year",
@@ -156,32 +166,44 @@ const SeatPlan = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-end px-4">
-        <button
-          className={`bg-[#1d69fa] text-white flex items-center gap-2 px-4 py-2 rounded-full`}
-          onClick={() => {
-            navigate(`/seat-plan/${examId}/${exam}/create`);
-          }}
-        >
-          <span className="font-semibold">Create Seat Plan</span>
-        </button>
-      </div>
-      <div className="mt-10">
-        <div>
-          <MaterialsTable
-            tableObject={tableObject}
-            data={data?.data}
-            columns={columns}
-            isLoading={isLoading}
-            isFetching={isFetching}
-            endpoint="exam_hall"
-            tags={["exam_hall"]}
-            refetch={refetch}
-            seeDetails={false}
-          />
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Seat Planning Console"
+        description="Assign invigilators and seat every candidate before exam day."
+        actions={
+          <button
+            className="btn-primary px-6"
+            onClick={() => navigate(`/seat-plan/${examId}/${exam}/create`)}
+          >
+            Create Seat Plan
+          </button>
+        }
+        stats={[
+          {
+            label: "Exam Sessions",
+            value: totalSessions ? `${totalSessions}` : "--",
+            badge: `Exam ID: ${examId}`,
+          },
+          {
+            label: "Assignments",
+            value: `${totalTeachers + totalStudents}`,
+            badge: `${totalTeachers} invigilators · ${totalStudents} students`,
+          },
+        ]}
+      />
+      <section className="rounded-3xl border border-slate-100 bg-white p-4 md:p-6 shadow-lg shadow-slate-200/60">
+        <MaterialsTable
+          tableObject={tableObject}
+          data={data?.data}
+          columns={columns}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          endpoint="exam_hall"
+          tags={["exam_hall"]}
+          refetch={refetch}
+          seeDetails={false}
+        />
+      </section>
     </div>
   );
 };

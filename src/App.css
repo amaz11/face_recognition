@@ -63,3 +63,23 @@
     height: 8;
     /* Ensures the X-axis scrollbar remains visible */
 }
+
+body {
+    background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 55%) fixed,
+        radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.08), transparent 45%) fixed,
+        #f5f7fb;
+    color: #0f172a;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}

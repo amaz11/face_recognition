@@ -8,6 +8,7 @@ import useModalHooks from "../../utils/hooks/modalHooks";
 import UpdateRoom from "../../Components/modal/hallRoom/UpdateRoom";
 import { useState } from "react";
 import { DeleteModal } from "../../Components/modal/Delete/DeleteModal";
+import PageHeader from "../../Components/PageHeader";
 
 const HallRoom = () => {
   const {
@@ -21,6 +22,11 @@ const HallRoom = () => {
   const { modalToggle, setModalToggle } = useModalHooks();
   const [currentData, setCurrentData] = useState({});
   const [currentModal, setCurrentModal] = useState("");
+  const halls = data?.data ?? [];
+  const totalRooms = halls.reduce(
+    (sum: number, hall: any) => sum + (hall?.hall_rooms?.length ?? 0),
+    0
+  );
 
   const columns = [
     {
@@ -98,27 +104,43 @@ const HallRoom = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-end items-center gap-2">
-        <AddRoom />
-        <CreateInstitutionForm />
-      </div>
-      <div className="mt-10">
-        <div>
-          <MaterialsTable
-            tableObject={tableObject}
-            data={data?.data}
-            columns={columns}
-            isLoading={isLoading}
-            isFetching={isFetching}
-            endpoint="exam_hall"
-            tags={["exam_hall"]}
-            refetch={refetch}
-            seeDetails={false}
-            UpdateList={UpdateInstitutionForm}
-          />
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Hall & Room Directory"
+        description="Manage all venues, capacity, and EIIN info before assigning seat plans."
+        actions={
+          <>
+            <AddRoom />
+            <CreateInstitutionForm />
+          </>
+        }
+        stats={[
+          {
+            label: "Exam Halls",
+            value: halls.length ? `${halls.length}` : "--",
+            badge: "Onboarded",
+          },
+          {
+            label: "Total Rooms",
+            value: totalRooms ? `${totalRooms}` : "--",
+            badge: "Ready for allocation",
+          },
+        ]}
+      />
+      <section className="rounded-3xl border border-slate-100 bg-white p-4 md:p-6 shadow-lg shadow-slate-200/60">
+        <MaterialsTable
+          tableObject={tableObject}
+          data={data?.data}
+          columns={columns}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          endpoint="exam_hall"
+          tags={["exam_hall"]}
+          refetch={refetch}
+          seeDetails={false}
+          UpdateList={UpdateInstitutionForm}
+        />
+      </section>
 
       {currentData && modalToggle && currentModal === "updateRoom" && (
         <UpdateRoom

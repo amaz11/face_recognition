@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { toast } from "react-toastify";
 import Loader from "../../Components/loader/Loader";
+import PageHeader from "../../Components/PageHeader";
 
 const CreateSeatPlan = () => {
   const { examId } = useParams();
@@ -125,7 +126,7 @@ const CreateSeatPlan = () => {
     try {
       const isValid = validateFormData(formData, setFormErrorData);
       if (!isValid) {
-        return; // Prevent submission
+        return;
       } else {
         const output = {
           student_ids: formData.studentIds,
@@ -149,169 +150,199 @@ const CreateSeatPlan = () => {
     }
   };
   return (
-    <div>
-      <form action="" onSubmit={handleSubmit}>
-        <div className="flex flex-col mb-3">
-          <label
-            htmlFor="exam_schedule"
-            className="pb-2 font-semibold text-sm starAfter"
+    <div className="space-y-6">
+      <PageHeader
+        title="Compose a Seat Plan"
+        description="Pick the exam slot, assign halls, and select teachers/students in one smooth flow."
+        actions={
+          <button
+            type="button"
+            className="btn-gray px-6"
+            onClick={() => navigate(-1)}
           >
-            Exam Date
-          </label>
-          <select
-            name="examScheduleId"
-            value={formData.examScheduleId}
-            onChange={handleSelectChange}
-            className="px-3 py-2 border border-slate-500 rounded focus:outline-[#1d69fa]"
-            disabled={isLoading}
-          >
-            <option value="none">Select Exam Date</option>
-            {data?.exam_log?.map(({ id, exam_date }: any) => (
-              <option key={id} value={id}>
-                {exam_date ? exam_date : "N/A"}
-              </option>
-            ))}
-          </select>
-          {formData.examScheduleId === undefined ||
-          formData.examScheduleId === "none" ||
-          isError ? (
-            <span className="pt-2 text-red-400">
-              {isError
-                ? error?.message || "Failed to load data."
-                : formErrorData.examScheduleId}
-            </span>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-4 mb-3">
-          {/* Hall Selection */}
+            Back to seat plans
+          </button>
+        }
+        stats={[
+          {
+            label: "Exam ID",
+            value: examId ?? "--",
+            badge: "Context locked",
+          },
+          {
+            label: "Ready To Submit",
+            value:
+              formData.studentIds.length && formData.teacherIds.length
+                ? "Yes"
+                : "Pending",
+            badge: "Fill all required fields",
+          },
+        ]}
+      />
+      <section className="rounded-3xl border border-slate-100 bg-white p-4 md:p-6 shadow-lg shadow-slate-200/60">
+        <form action="" onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-col">
-            <label className="pb-2 font-semibold text-sm starAfter">
-              Select Hall
+            <label
+              htmlFor="exam_schedule"
+              className="pb-2 font-semibold text-sm starAfter"
+            >
+              Exam Date
             </label>
             <select
-              name="hall_id"
-              value={formData.hallId}
-              onChange={(e) => {
-                const selectedId = Number(e.target.value);
-                setFormData({
-                  ...formData,
-                  hallId: selectedId,
-                  hallRoomId: "none", // reset hall room selection
-                });
-              }}
-              className="px-3 py-2 border border-slate-500 rounded focus:outline-[#1d69fa]"
-              disabled={isHallRoomLoading}
+              name="examScheduleId"
+              value={formData.examScheduleId}
+              onChange={handleSelectChange}
+              className="px-3 py-2 border border-slate-200 rounded-xl focus:outline-[#1d69fa]"
+              disabled={isLoading}
             >
-              <option value="none">Select Hall</option>
-              {hallRoomData?.data?.map(({ id, name }: any) => (
+              <option value="none">Select Exam Date</option>
+              {data?.exam_log?.map(({ id, exam_date }: any) => (
                 <option key={id} value={id}>
-                  {name}
+                  {exam_date ? exam_date : "N/A"}
                 </option>
               ))}
             </select>
-            {formData.hallId === "none" || formData.hallId === undefined ? (
+            {formData.examScheduleId === undefined ||
+            formData.examScheduleId === "none" ||
+            isError ? (
               <span className="pt-2 text-red-400">
                 {isError
-                  ? error?.message || "Something went wrong."
-                  : formErrorData.hallRoomId}
+                  ? error?.message || "Failed to load data."
+                  : formErrorData.examScheduleId}
               </span>
             ) : null}
           </div>
-
-          {/* Hall Room Selection */}
-          {formData.hallId && formData.hallId !== "none" && (
+          <div className="grid gap-4 md:grid-cols-2">
             <div className="flex flex-col">
               <label className="pb-2 font-semibold text-sm starAfter">
-                Select Hall Room
+                Select Hall
               </label>
               <select
-                name="hallRoomId"
-                value={formData.hallRoomId}
-                onChange={handleSelectChange}
-                className="px-3 py-2 border border-slate-500 rounded focus:outline-[#1d69fa]"
+                name="hall_id"
+                value={formData.hallId}
+                onChange={(e) => {
+                  const selectedId = Number(e.target.value);
+                  setFormData({
+                    ...formData,
+                    hallId: selectedId,
+                    hallRoomId: "none",
+                  });
+                }}
+                className="px-3 py-2 border border-slate-200 rounded-xl focus:outline-[#1d69fa]"
+                disabled={isHallRoomLoading}
               >
-                <option value="none">Select Room</option>
-                {hallRoomData?.data
-                  ?.find((hall: any) => hall.id === Number(formData.hallId))
-                  ?.hall_rooms.map(({ id, roomNo }: any) => (
-                    <option key={id} value={id}>
-                      {roomNo}
-                    </option>
-                  ))}
+                <option value="none">Select Hall</option>
+                {hallRoomData?.data?.map(({ id, name }: any) => (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                ))}
               </select>
-              {formData.hallRoomId === "none" ||
-              formData.hallRoomId === undefined ? (
+              {formData.hallId === "none" || formData.hallId === undefined ? (
                 <span className="pt-2 text-red-400">
-                  {error || formErrorData.hallRoomId}
+                  {isError
+                    ? error?.message || "Something went wrong."
+                    : formErrorData.hallRoomId}
                 </span>
               ) : null}
             </div>
-          )}
-        </div>
 
-        <Autocomplete
-          className="mb-4"
-          multiple
-          options={studentOptions}
-          loading={isStudentsLoading}
-          getOptionLabel={(option) => option?.student?.name ?? "Unknown"}
-          value={studentOptions.filter((opt: any) =>
-            formData.studentIds?.includes(opt.student.id)
-          )}
-          onChange={(_, selectedOptions) => {
-            const selectedIds = selectedOptions.map((opt) => opt.student.id);
-            setFormData({ ...formData, studentIds: selectedIds });
-            setFormErrorData({ ...formErrorData, studentIds: "" });
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Select Students"
-              placeholder="Students"
-              error={formErrorData?.studentIds?.length > 0}
-              helperText={formErrorData?.studentIds}
-            />
-          )}
-        />
+            {formData.hallId && formData.hallId !== "none" && (
+              <div className="flex flex-col">
+                <label className="pb-2 font-semibold text-sm starAfter">
+                  Select Hall Room
+                </label>
+                <select
+                  name="hallRoomId"
+                  value={formData.hallRoomId}
+                  onChange={handleSelectChange}
+                  className="px-3 py-2 border border-slate-200 rounded-xl focus:outline-[#1d69fa]"
+                >
+                  <option value="none">Select Room</option>
+                  {hallRoomData?.data
+                    ?.find((hall: any) => hall.id === Number(formData.hallId))
+                    ?.hall_rooms.map(({ id, roomNo }: any) => (
+                      <option key={id} value={id}>
+                        {roomNo}
+                      </option>
+                    ))}
+                </select>
+                {formData.hallRoomId === "none" ||
+                formData.hallRoomId === undefined ? (
+                  <span className="pt-2 text-red-400">
+                    {error || formErrorData.hallRoomId}
+                  </span>
+                ) : null}
+              </div>
+            )}
+          </div>
 
-        <Autocomplete
-          multiple
-          options={teacherOptions}
-          loading={isteachersLoading}
-          getOptionLabel={(option) => `${option.name} (${option.email})`}
-          value={teacherOptions?.filter((opt: any) =>
-            formData.teacherIds.includes(opt.id)
-          )}
-          onChange={(_, selectedOptions) => {
-            const selectedIds = selectedOptions.map((opt) => opt.id);
-            setFormData({ ...formData, teacherIds: selectedIds });
-            setFormErrorData({ ...formErrorData, teacherIds: "" });
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Select Teachers"
-              placeholder="Teachers"
-              error={formErrorData?.teacherIds?.length > 0}
-              helperText={formErrorData?.teacherIds}
+          <div className="grid gap-4 md:grid-cols-2">
+            <Autocomplete
+              className="w-full"
+              multiple
+              options={studentOptions}
+              loading={isStudentsLoading}
+              getOptionLabel={(option) => option?.student?.name ?? "Unknown"}
+              value={studentOptions.filter((opt: any) =>
+                formData.studentIds?.includes(opt.student.id)
+              )}
+              onChange={(_, selectedOptions) => {
+                const selectedIds = selectedOptions.map((opt) => opt.student.id);
+                setFormData({ ...formData, studentIds: selectedIds });
+                setFormErrorData({ ...formErrorData, studentIds: "" });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Students"
+                  placeholder="Students"
+                  error={formErrorData?.studentIds?.length > 0}
+                  helperText={formErrorData?.studentIds}
+                />
+              )}
             />
-          )}
-        />
-        <div className="flex justify-end mt-3 px-4">
-          <button
-            className={`bg-[#1d69fa] text-white flex items-center gap-2 px-4 py-2 rounded-full`}
-            type="submit"
-            disabled={
-              isPostLoading ||
-              isLoading ||
-              isStudentsLoading ||
-              isteachersLoading
-            }
-          >
-            <span className="font-semibold">Create Seat Plan</span>
-          </button>
-        </div>
-      </form>
+
+            <Autocomplete
+              multiple
+              options={teacherOptions}
+              loading={isteachersLoading}
+              getOptionLabel={(option) => `${option.name} (${option.email})`}
+              value={teacherOptions?.filter((opt: any) =>
+                formData.teacherIds.includes(opt.id)
+              )}
+              onChange={(_, selectedOptions) => {
+                const selectedIds = selectedOptions.map((opt) => opt.id);
+                setFormData({ ...formData, teacherIds: selectedIds });
+                setFormErrorData({ ...formErrorData, teacherIds: "" });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Teachers"
+                  placeholder="Teachers"
+                  error={formErrorData?.teacherIds?.length > 0}
+                  helperText={formErrorData?.teacherIds}
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-end">
+            <button
+              className="btn-primary px-6"
+              type="submit"
+              disabled={
+                isPostLoading ||
+                isLoading ||
+                isStudentsLoading ||
+                isteachersLoading
+              }
+            >
+              <span className="font-semibold">Create Seat Plan</span>
+            </button>
+          </div>
+        </form>
+      </section>
       {(isLoading ||
         isPostLoading ||
         isStudentsLoading ||

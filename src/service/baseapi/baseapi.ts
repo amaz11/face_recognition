@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getTokenFromLocalStorage } from '../../utils/getToken';
 
 const baseQueryWithMeta = fetchBaseQuery({
-    baseUrl: 'https://6abc671c084b.ngrok-free.app/v1/' , // Adjust the base URL as needed || 'http://localhost:8000/v1/'
+    baseUrl: 'http://localhost:8001/v1/' , // Adjust the base URL as needed || 'http://localhost:8001/v1/'
     prepareHeaders: (headers) => {
         const token = getTokenFromLocalStorage();
         if (token) {

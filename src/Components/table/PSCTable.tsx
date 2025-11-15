@@ -1,46 +1,38 @@
 const PSCTable = () => {
-  return (
-    <div>
-      <div className="mx-auto px-4 ">
-        <div className="py-8">
-          <div>
-            <h2 className="text-2xl font-semibold leading-tight"></h2>
-          </div>
-          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-            <div className="inline-block min-w-full shadow-md rounded-lg overflow-hidden">
-              <table className="min-w-full leading-normal">
-                <thead>
-                  <tr>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Rotine File
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Teachers File
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
+  const resources = [
+    {
+      label: "Routine File",
+      description: "Upload the master timetable PDF for PSC exams.",
+      status: "Pending upload",
+    },
+    {
+      label: "Teachers File",
+      description: "Provide the invigilator/teacher deployment sheet.",
+      status: "Pending upload",
+    },
+  ];
 
-                <tbody>
-                  <tr>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <p className="text-gray-900 whitespace-no-wrap"></p>
-                    </td>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <p className="text-gray-900 whitespace-no-wrap"></p>
-                    </td>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <p className="text-gray-900 whitespace-no-wrap"></p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+  return (
+    <div className="space-y-4">
+      {resources.map((resource) => (
+        <div
+          key={resource.label}
+          className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 md:flex-row md:items-center md:justify-between"
+        >
+          <div>
+            <p className="text-sm uppercase tracking-wide text-slate-400">
+              {resource.label}
+            </p>
+            <p className="text-lg font-semibold text-slate-900">
+              {resource.description}
+            </p>
+            <p className="text-sm text-slate-500">{resource.status}</p>
           </div>
+          <button className="btn-primary min-w-[160px] justify-center px-6 opacity-60">
+            Coming soon
+          </button>
         </div>
-      </div>
+      ))}
     </div>
   );
 };

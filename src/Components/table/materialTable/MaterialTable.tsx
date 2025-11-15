@@ -2,6 +2,7 @@ import {
     MaterialReactTable,
     useMaterialReactTable,
 } from "material-react-table";
+import { alpha } from "@mui/material/styles";
 import { useMemo } from "react";
 import "./materialCss.css";
 import DropDown from "../../dropDown/DropDown";
@@ -96,22 +97,65 @@ const MaterialsTable = ({
             },
         },
 
+        muiTablePaperProps: {
+            elevation: 0,
+            sx: {
+                borderRadius: 4,
+                border: "1px solid #e2e8f0",
+                backgroundImage:
+                    "linear-gradient(135deg, rgba(248,250,252,0.9), rgba(255,255,255,0.95))",
+                boxShadow: "0 25px 65px -45px rgba(15,23,42,0.6)",
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                borderRadius: 4,
+                border: "1px solid #eef2ff",
+            },
+        },
+        muiTableProps: {
+            sx: {
+                "& tbody tr:last-of-type td": {
+                    borderBottom: "none",
+                },
+            },
+        },
+        muiTableHeadRowProps: {
+            sx: {
+                backgroundColor: "#f8fafc",
+                "& th": {
+                    fontSize: "0.75rem",
+                    letterSpacing: "0.08em",
+                    fontWeight: 600,
+                    color: "#475569",
+                    textTransform: "uppercase",
+                },
+            },
+        },
         muiTableHeadCellProps: ({ column }) => ({
             sx: {
-                // textAlign: "center",
-                // paddingLeft: 8,
-                // paddingRight: 8,
-                fontSize: "16px",
+                fontSize: "0.95rem",
                 backgroundColor: column.getIsPinned() ? "white" : "inherit",
+                borderBottom: "1px solid #e2e8f0",
             },
         }),
 
-        muiTableBodyCellProps: ({ column }) => ({
-            //conditionally style pinned columns
+        muiTableBodyRowProps: {
             sx: {
-                // textAlign: 'center',
+                transition: "background-color 200ms ease",
+                borderBottom: "1px solid #f1f5f9",
+                "&:hover": {
+                    backgroundColor: "#f8fafc",
+                },
+            },
+        },
+        muiTableBodyCellProps: ({ column }) => ({
+            sx: {
                 backgroundColor: column.getIsPinned() ? "white" : "inherit",
                 boxShadow: column.getIsPinned() ? 0 : 0,
+                borderBottom: "1px solid #f1f5f9",
+                fontSize: "0.95rem",
+                color: "#0f172a",
             },
         }),
         renderRowActionMenuItems: ({ row, closeMenu }) => [
@@ -150,27 +194,34 @@ const MaterialsTable = ({
                 display: "none",
             },
         },
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: alpha("#312e81", 0.03),
+                borderBottom: "1px solid #eef2ff",
+                py: 2,
+                px: 2,
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: alpha("#312e81", 0.03),
+                borderTop: "1px solid #eef2ff",
+                py: 2,
+                px: 2,
+            },
+        },
         muiPaginationProps: {
             color: "primary",
-            rowsPerPageOptions: [30, 50, 100],
+            rowsPerPageOptions: [15, 30, 50, 100],
             shape: "rounded",
             variant: "outlined",
             SelectProps: {
-                native: true, // Use native dropdown for rows per page
+                native: true,
             },
-            // labelRowsPerPage: 'Rows per page:', // Custom label
-            // sx: {
-            //     '.MuiTablePagination-selectLabel': {
-            //         color: 'blue', // Custom styles for labels
-            //     },
-            //     '.MuiTablePagination-select': {
-            //         color: 'green',
-            //     },
-            // }
         },
         muiTableBodyProps: {
             sx: {
-                borderRadius: 20,
+                borderRadius: 4,
             },
         },
         muiSkeletonProps: {

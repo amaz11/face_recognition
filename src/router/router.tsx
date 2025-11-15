@@ -13,11 +13,14 @@ import HallRoom from "../pages/hallroom/HallRoom";
 import SeatPlan from "../pages/seatPlan/SeatPlan";
 import CreateSeatPlan from "../pages/seatPlan/CreateSeatPlan";
 
-
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <AdminAuthHOC><PageLayout /></AdminAuthHOC>,
+    element: (
+      <AdminAuthHOC>
+        <PageLayout />
+      </AdminAuthHOC>
+    ),
     children: [
       {
         index: true,
@@ -49,7 +52,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/seat-plan/:examId/:exam/create",
-        element: <CreateSeatPlan />
+        element: <CreateSeatPlan />,
       },
       {
         path: "/teachers",

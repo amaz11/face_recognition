@@ -2,6 +2,7 @@ import CreateExamsLogs from "../../Components/modal/Exams/CreateExamLog";
 import UpdateExamsLogs from "../../Components/modal/Exams/Update/UdpateExamLog";
 import MaterialsTable from "../../Components/table/materialTable/MaterialTable";
 import { useGetDataQuery } from "../../service/endpoint";
+import PageHeader from "../../Components/PageHeader";
 
 const ExamLogs = () => {
   const {
@@ -12,6 +13,14 @@ const ExamLogs = () => {
     error: _error,
     refetch,
   } = useGetDataQuery({ endpoint: "/exam/log", tags: ["examlog"] });
+  const logs = data?.data ?? [];
+  const totalLogs = logs.length;
+  const upcomingDeadlines = logs.filter((log: any) => {
+    if (!log?.registration_deadline) return false;
+    const timestamp = Date.parse(log.registration_deadline);
+    if (Number.isNaN(timestamp)) return false;
+    return timestamp >= Date.now();
+  }).length;
 
   const columns = [
     {
@@ -34,12 +43,25 @@ const ExamLogs = () => {
     },
   };
   return (
-    <div>
-      <div>
-        <CreateExamsLogs />
-      </div>
-
-      <div className="mt-10">
+    <div className="space-y-6">
+      <PageHeader
+        title="Exam Log Timeline"
+        description="Registration and scheduling checkpoints for every exam cycle at a glance."
+        actions={<CreateExamsLogs />}
+        stats={[
+          {
+            label: "Tracked Logs",
+            value: totalLogs ? `${totalLogs}` : "--",
+            badge: "Historical entries",
+          },
+          {
+            label: "Open Deadlines",
+            value: `${upcomingDeadlines}`,
+            badge: "Require follow-up",
+          },
+        ]}
+      />
+      <section className="rounded-3xl border border-slate-100 bg-white p-4 md:p-6 shadow-lg shadow-slate-200/60">
         <MaterialsTable
           tableObject={tableObject}
           data={data?.data}
@@ -52,7 +74,7 @@ const ExamLogs = () => {
           refetch={refetch}
           seeDetails={false}
         />
-      </div>
+      </section>
     </div>
   );
 };

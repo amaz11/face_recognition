@@ -7,7 +7,6 @@ import { useGetDataQuery } from "../service/endpoint";
 import {
   LuCalendarDays,
   LuClipboardList,
-  LuGraduationCap,
   LuLayoutDashboard,
   LuLineChart,
   LuMapPin,

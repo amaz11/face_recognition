@@ -2,7 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getTokenFromLocalStorage } from '../../utils/getToken';
 
 const baseQueryWithMeta = fetchBaseQuery({
-    baseUrl: 'http://139.59.5.76:8001/v1/' , // Adjust the base URL as needed || 'http://localhost:8001/v1/'
+    // baseUrl: 'http://139.59.5.76:8001/v1/' , // Adjust the base URL as needed || 'http://localhost:8001/v1/'
+    baseUrl: 'https://facerecognitionbe-production.up.railway.app/v1/', // Adjust the base URL as needed
     prepareHeaders: (headers) => {
         const token = getTokenFromLocalStorage();
         if (token) {

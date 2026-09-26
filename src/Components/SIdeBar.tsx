@@ -10,6 +10,7 @@ import {
   LuLayoutDashboard,
   LuLineChart,
   LuMapPin,
+  LuSettings,
   LuUsers2,
 } from "react-icons/lu";
 
@@ -20,6 +21,7 @@ const navLinks = [
   { to: "/exam-logs", label: "Exam Logs", icon: LuLineChart },
   { to: "/exam-hall", label: "Hall Rooms", icon: LuMapPin },
   { to: "/teachers", label: "Teachers", icon: LuUsers2 },
+  { to: "/settings", label: "Settings", icon: LuSettings },
   // { to: "/psc-exam", label: "PSC Exam", icon: LuGraduationCap },
 ];
 

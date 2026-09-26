@@ -12,6 +12,7 @@ import Teachers from "../pages/teachers/Teachers";
 import HallRoom from "../pages/hallroom/HallRoom";
 import SeatPlan from "../pages/seatPlan/SeatPlan";
 import CreateSeatPlan from "../pages/seatPlan/CreateSeatPlan";
+import Settings from "../pages/Settings/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
       {
         path: "/exam-hall",
         element: <HallRoom />,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
       },
     ],
   },

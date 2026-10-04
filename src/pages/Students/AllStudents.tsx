@@ -43,7 +43,9 @@ const AllStudents = () => {
         {
             accessorKey: "registretionDone",
             header: 'Registered',
-            Cell: ({ row }: { row: any }) => <span>{row.original.registretionDone ? "Yes" : "No"}</span>
+            Cell: ({ row }: { row: any }) => <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${row.original.registretionDone ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                    {row.original.registretionDone ? "Registered" : "Not registered"}
+                </span>
         },
         {
             accessorKey: "examCount",

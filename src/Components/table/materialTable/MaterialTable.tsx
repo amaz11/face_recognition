@@ -21,6 +21,11 @@ type MaterialsTableReactTs = {
     seeDetails?: boolean;
     enablePagination?: boolean;
     enableExpanding?: boolean;
+    serverPagination?: {
+        pagination: { pageIndex: number; pageSize: number };
+        onPaginationChange: (updater: any) => void;
+        rowCount: number;
+    };
 };
 
 const MaterialsTable = ({
@@ -37,6 +42,7 @@ const MaterialsTable = ({
     seeDetails = true,
     enablePagination = true,
     enableExpanding = false,
+    serverPagination,
 }: MaterialsTableReactTs) => {
     //simple column definitions pointing to flat data
     const tableColumns = useMemo(() => columns, [data, isLoading]);
@@ -62,6 +68,11 @@ const MaterialsTable = ({
         enableFacetedValues: false,
         rowNumberDisplayMode: "original",
         enablePagination: enablePagination,
+        ...(serverPagination && {
+            manualPagination: true,
+            rowCount: serverPagination.rowCount,
+            onPaginationChange: serverPagination.onPaginationChange,
+        }),
         //     enableSorting: false,
         //     muiRowDragHandleProps: ({ table }) => ({
         //     onDragEnd: () => {
@@ -242,6 +253,7 @@ const MaterialsTable = ({
             isLoading,
             // isSaving: ,
             showSkeletons: isFetching,
+            ...(serverPagination && { pagination: serverPagination.pagination }),
         },
 
         //turn off a feature

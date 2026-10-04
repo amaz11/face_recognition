@@ -3,6 +3,7 @@ import UpdateExamsLogs from "../../Components/modal/Exams/Update/UdpateExamLog";
 import MaterialsTable from "../../Components/table/materialTable/MaterialTable";
 import { useGetDataQuery } from "../../service/endpoint";
 import PageHeader from "../../Components/PageHeader";
+import { toast } from "react-toastify";
 
 const ExamLogs = () => {
   const {
@@ -30,6 +31,28 @@ const ExamLogs = () => {
     {
       accessorKey: "registration_deadline", // accessorKey is used to access the field in the data
       header: "Registration Deadline",
+    },
+    {
+      id: "applyLink",
+      header: "Apply Link",
+      accessorFn: (row: any) => row?.exam_log_token?.[0]?.token ?? "",
+      Cell: ({ row }: any) => {
+        const applyToken = row.original?.exam_log_token?.[0]?.token;
+        if (!applyToken) return <span className="text-slate-400">--</span>;
+        const link = `${window.location.origin}/apply/${applyToken}`;
+        return (
+          <button
+            type="button"
+            className="text-blue-600 hover:underline text-sm"
+            onClick={() => {
+              navigator.clipboard.writeText(link);
+              toast.success("Apply link copied");
+            }}
+          >
+            Copy Apply Link
+          </button>
+        );
+      },
     },
   ];
 

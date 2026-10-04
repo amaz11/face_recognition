@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import MaterialsTable from '../../Components/table/materialTable/MaterialTable'
 import { useGetDataQuery } from '../../service/endpoint';
 import PageHeader from '../../Components/PageHeader';
@@ -22,6 +22,17 @@ const Students = () => {
         {
             accessorKey: "student.phone", // accessorKey is used to access the field in the data
             header: 'Phone',
+        },
+
+        {
+            id: "examsApplied",
+            header: 'Exams Applied',
+            accessorFn: (row: any) => row.student?._count?.student_exam_log ?? 0,
+            Cell: ({ row }: { row: any }) => (
+                <Link to={`/all-students/${row.original.student?.id}`} className='text-indigo-600 hover:underline'>
+                    {row.original.student?._count?.student_exam_log ?? 0}
+                </Link>
+            )
         },
 
         {

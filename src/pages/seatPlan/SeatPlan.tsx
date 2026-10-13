@@ -198,8 +198,8 @@ const SeatPlan = () => {
           columns={columns}
           isLoading={isLoading}
           isFetching={isFetching}
-          endpoint="exam_hall"
-          tags={["exam_hall"]}
+          endpoint="admin/seat-plan"
+          tags={["seat-plan"]}
           refetch={refetch}
           seeDetails={false}
         />

@@ -4,7 +4,14 @@ import {
   LuClipboardCheck,
   LuClock9,
   LuActivity,
+  LuCalendarDays,
+  LuUserCheck,
+  LuUsers,
+  LuArmchair,
 } from "react-icons/lu";
+import DashboardChartsSection, {
+  DashboardCharts,
+} from "../Components/dashboard/DashboardCharts";
 import { useGetDataQuery } from "../service/endpoint";
 import Loader from "../Components/loader/Loader";
 
@@ -46,7 +53,28 @@ const fallbackDashboardPayload = {
   ],
 };
 
-type DashboardPayload = typeof fallbackDashboardPayload;
+const fallbackCharts: DashboardCharts = {
+  attendanceBreakdown: [
+    { name: "Attended", value: 312 },
+    { name: "Proxy flagged", value: 9 },
+    { name: "Seated, not yet in", value: 96 },
+    { name: "Not seated", value: 40 },
+  ],
+  examProgress: [
+    { examLogId: 1, exam: "BCS Prelim", enrolled: 450, seated: 420, attended: 380 },
+    { examLogId: 2, exam: "PSC Recruit", enrolled: 320, seated: 300, attended: 210 },
+    { examLogId: 3, exam: "Bankers", enrolled: 280, seated: 240, attended: 120 },
+    { examLogId: 4, exam: "Univ. Viva", enrolled: 120, seated: 90, attended: 60 },
+  ],
+  registrationTrend: Array.from({ length: 14 }, (_, i) => ({
+    date: `D${i + 1}`,
+    registrations: [4, 7, 5, 9, 12, 8, 15, 11, 18, 14, 20, 17, 24, 22][i],
+  })),
+};
+
+type DashboardPayload = typeof fallbackDashboardPayload & {
+  charts?: DashboardCharts;
+};
 type Highlights = DashboardPayload["highlights"];
 type UpcomingSchedule = DashboardPayload["upcomingSchedules"][number];
 type LiveActivity = DashboardPayload["liveActivity"][number];
@@ -97,9 +125,12 @@ const Home = () => {
   const activityTimeline: LiveActivity[] =
     dashboardPayload?.liveActivity ?? fallbackDashboardPayload.liveActivity;
 
+  const charts: DashboardCharts = dashboardPayload?.charts ?? fallbackCharts;
+
   const metricCards = [
     {
       title: "Scheduled Exams",
+      icon: LuCalendarDays,
       value: formatNumber(highlights?.scheduledExams?.total),
       badge: formatDelta(highlights?.scheduledExams?.thisWeek, {
         suffix: " this week",
@@ -108,6 +139,7 @@ const Home = () => {
     },
     {
       title: "Verified Students",
+      icon: LuUserCheck,
       value: formatNumber(highlights?.verifiedStudents?.total),
       badge: formatDelta(highlights?.verifiedStudents?.today, {
         suffix: " today",
@@ -116,6 +148,7 @@ const Home = () => {
     },
     {
       title: "Invigilators On Duty",
+      icon: LuUsers,
       value: formatNumber(highlights?.invigilatorsOnDuty?.total),
       badge: formatDelta(highlights?.invigilatorsOnDuty?.pending, {
         prefix: "",
@@ -125,6 +158,7 @@ const Home = () => {
     },
     {
       title: "Seat Plan Coverage",
+      icon: LuArmchair,
       value: `${formatNumber(highlights?.seatPlanCoverage?.percentage)}%`,
       badge: `${formatNumber(
         highlights?.seatPlanCoverage?.assigned
@@ -257,17 +291,34 @@ const Home = () => {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {metricCards.map(({ title, value, badge, tone }) => (
+        {metricCards.map(({ title, value, badge, tone, icon: Icon }) => (
           <div
             key={title}
-            className={`rounded-3xl border border-white/40 bg-gradient-to-br ${tone} p-4 text-white shadow-lg shadow-slate-900/20`}
+            className={`relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br ${tone} p-5 text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:shadow-xl`}
           >
-            <p className="text-sm uppercase text-white/80">{title}</p>
-            <p className="mt-3 text-3xl font-bold">{value}</p>
-            <p className="text-sm text-white/80">{badge}</p>
+            <Icon
+              aria-hidden
+              className="absolute -right-3 -bottom-3 text-white/15"
+              size={96}
+            />
+            <div className="relative">
+              <div className="flex items-center justify-between">
+                <p className="text-sm uppercase text-white/80">{title}</p>
+                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/20">
+                  <Icon size={18} />
+                </span>
+              </div>
+              <p className="mt-3 text-3xl font-bold">{value}</p>
+              <p className="text-sm text-white/80">{badge}</p>
+            </div>
           </div>
         ))}
       </section>
+
+      <DashboardChartsSection
+        charts={charts}
+        seatCoverage={highlights?.seatPlanCoverage?.percentage ?? 0}
+      />
 
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="p-6 bg-white border shadow-lg lg:col-span-2 rounded-3xl border-slate-100 shadow-slate-200/50">

@@ -143,20 +143,26 @@ const SeatCoverageGauge = ({ percentage }: { percentage: number }) => (
 const ExamProgressBars = ({ data }: { data: DashboardCharts["examProgress"] }) => {
   if (data.length === 0) return <EmptyState text="No exam enrollments yet" />;
 
+  // Several exam logs can share one exam name, so the axis is keyed by the unique
+  // exam-log id and the name is only used for display.
+  const nameById = new Map(data.map((row) => [row.examLogId, row.exam]));
+  const nameOf = (id: number | string) => nameById.get(Number(id)) ?? String(id);
+
   return (
     <div className="h-72">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} barGap={4} margin={{ left: -16, right: 8 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
           <XAxis
-            dataKey="exam"
+            dataKey="examLogId"
             tick={{ fontSize: 12, fill: "#64748b" }}
             tickLine={false}
             axisLine={false}
             interval={0}
-            tickFormatter={(value: string) =>
-              value.length > 12 ? `${value.slice(0, 11)}…` : value
-            }
+            tickFormatter={(id: number) => {
+              const name = nameOf(id);
+              return name.length > 12 ? `${name.slice(0, 11)}…` : name;
+            }}
           />
           <YAxis
             allowDecimals={false}
@@ -164,7 +170,11 @@ const ExamProgressBars = ({ data }: { data: DashboardCharts["examProgress"] }) =
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "#f1f5f9" }} />
+          <Tooltip
+            contentStyle={tooltipStyle}
+            cursor={{ fill: "#f1f5f9" }}
+            labelFormatter={(id) => nameOf(id as number)}
+          />
           <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
           <Bar dataKey="enrolled" name="Enrolled" fill={COLORS.indigo} radius={[6, 6, 0, 0]} />
           <Bar dataKey="seated" name="Seated" fill={COLORS.sky} radius={[6, 6, 0, 0]} />

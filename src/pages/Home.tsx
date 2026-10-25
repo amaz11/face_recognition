@@ -298,8 +298,8 @@ const Home = () => {
           >
             <Icon
               aria-hidden
-              className="absolute -right-3 -bottom-3 text-white/15"
-              size={96}
+              className="absolute -right-2 -bottom-2 text-white/10"
+              size={72}
             />
             <div className="relative">
               <div className="flex items-center justify-between">

@@ -29,6 +29,14 @@ const Exams = () => {
       accessorKey: "exam_type.name", // accessorKey is used to access the field in the data
       header: "Exam Type",
     },
+    {
+      id: "identity_fields",
+      header: "Applicant Info Required",
+      accessorFn: (row: any) =>
+        (row.identity_fields ?? [])
+          .map((f: any) => f.fieldKey.replace(/_/g, " "))
+          .join(", ") || "-",
+    },
   ];
 
   const tableObject = {

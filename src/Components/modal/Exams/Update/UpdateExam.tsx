@@ -8,6 +8,9 @@ import { toast } from "react-toastify";
 import InputField from "../../../textfield/InputField";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import UpdateModal from "../../UpdateModal";
+import IdentityFieldsPicker, {
+  IdentityFieldSelection,
+} from "../IdentityFieldsPicker";
 
 const UpdateExam = ({ id, row }: { id: any; row: any }) => {
   const {
@@ -22,6 +25,14 @@ const UpdateExam = ({ id, row }: { id: any; row: any }) => {
     name: row.name || "",
     examTypeId: row.exam_type.id || undefined,
   });
+  const [identityFields, setIdentityFields] = useState<
+    IdentityFieldSelection[]
+  >(
+    (row.identity_fields ?? []).map((f: any) => ({
+      fieldKey: f.fieldKey,
+      required: f.required,
+    }))
+  );
   const { modalToggle, setModalToggle } = useModalHooks();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +52,11 @@ const UpdateExam = ({ id, row }: { id: any; row: any }) => {
         tags: ["exams"],
       }).unwrap();
       if (res.success) toast.success(res?.message);
+      await updateData({
+        endpoint: `exams/${id}/identity-fields`,
+        data: { fields: identityFields },
+        tags: ["exams"],
+      }).unwrap();
       setModalToggle(false);
     } catch (error: any) {
       toast.error(error?.data?.errors?.name[0]);
@@ -99,6 +115,10 @@ const UpdateExam = ({ id, row }: { id: any; row: any }) => {
               <span className="pt-2 text-red-400">{error}</span>
             ) : null}
           </div>
+          <IdentityFieldsPicker
+            value={identityFields}
+            onChange={setIdentityFields}
+          />
           <div className="flex justify-center items-center mt-8 mb-4">
             <button
               disabled={isLoading}

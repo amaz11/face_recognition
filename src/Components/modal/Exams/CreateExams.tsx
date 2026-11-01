@@ -3,11 +3,15 @@ import Modal from "../../Modal";
 import {
   useGetDataQuery,
   usePostDataMutation,
+  useUpdateDataMutation,
 } from "../../../service/endpoint";
 import useModalHooks from "../../../utils/hooks/modalHooks";
 import { toast } from "react-toastify";
 import InputField from "../../textfield/InputField";
 import { MdDriveFileRenameOutline } from "react-icons/md";
+import IdentityFieldsPicker, {
+  IdentityFieldSelection,
+} from "./IdentityFieldsPicker";
 
 const CreateExams = () => {
   const {
@@ -17,6 +21,10 @@ const CreateExams = () => {
     error,
   } = useGetDataQuery({ endpoint: "examsType" });
   const [postData, { isLoading }] = usePostDataMutation();
+  const [updateData] = useUpdateDataMutation();
+  const [identityFields, setIdentityFields] = useState<
+    IdentityFieldSelection[]
+  >([]);
   const [formData, setFormData] = useState({
     name: "",
     examTypeId: undefined,
@@ -40,7 +48,15 @@ const CreateExams = () => {
         tags: ["exams"],
       }).unwrap();
       if (res.success) toast.success(res?.message);
+      if (identityFields.length && res?.id) {
+        await updateData({
+          endpoint: `exams/${res.id}/identity-fields`,
+          data: { fields: identityFields },
+          tags: ["exams"],
+        }).unwrap();
+      }
       setFormData({ name: "", examTypeId: undefined });
+      setIdentityFields([]);
       setModalToggle(false);
     } catch (error: any) {
       toast.error(error?.data?.errors?.name[0]);
@@ -99,6 +115,10 @@ const CreateExams = () => {
               <span className="pt-2 text-red-400">{error}</span>
             ) : null}
           </div>
+          <IdentityFieldsPicker
+            value={identityFields}
+            onChange={setIdentityFields}
+          />
           <div className="flex justify-center items-center mt-8 mb-4">
             <button
               disabled={isLoading}

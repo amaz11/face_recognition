@@ -22,6 +22,7 @@ const SeatPlan = () => {
   };
 
   const { examId, exam } = useParams();
+  const navigateTo = useNavigate();
   const {
     data,
     isLoading,
@@ -84,6 +85,29 @@ const SeatPlan = () => {
       const teachers = row.original.teachers_log || [];
       const students = row.original.student_exam_log || [];
 
+      // Group by room so each room can be edited on its own.
+      const rooms = new Map<number, any>();
+      const ensureRoom = (room: any) => {
+        if (!rooms.has(room.id)) {
+          rooms.set(room.id, {
+            id: room.id,
+            roomNo: room.roomNo,
+            capacity: room.capacity,
+            hallName: room.hall?.name ?? "",
+            students: 0,
+            teachers: 0,
+          });
+        }
+        return rooms.get(room.id);
+      };
+      students.forEach((l: any) => {
+        if (l.hall_room) ensureRoom(l.hall_room).students += 1;
+      });
+      teachers.forEach((l: any) =>
+        (l.room_duty || []).forEach((r: any) => (ensureRoom(r).teachers += 1))
+      );
+      const unseated = students.filter((l: any) => !l.hall_room).length;
+
       return (
         <Box sx={{ p: 2 }}>
           <Tabs
@@ -91,11 +115,60 @@ const SeatPlan = () => {
             onChange={handleTabChange}
             aria-label="detail panel tabs"
           >
+            <Tab label="Rooms" />
             <Tab label="Invigilators" />
             <Tab label="Students" />
           </Tabs>
 
           {tabIndex === 0 && (
+            <Box mt={2}>
+              {rooms.size > 0 ? (
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Hall</TableCell>
+                      <TableCell>Room</TableCell>
+                      <TableCell>Students</TableCell>
+                      <TableCell>Invigilators</TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {[...rooms.values()].map((room: any) => (
+                      <TableRow key={room.id}>
+                        <TableCell>{room.hallName}</TableCell>
+                        <TableCell>{room.roomNo}</TableCell>
+                        <TableCell>
+                          {room.students} / {room.capacity}
+                        </TableCell>
+                        <TableCell>{room.teachers}</TableCell>
+                        <TableCell>
+                          <button
+                            type="button"
+                            className="btn-primary px-4"
+                            onClick={() =>
+                              navigateTo(
+                                `/seat-plan/${examId}/${exam}/edit/${row.original.id}/${room.id}`
+                              )
+                            }
+                          >
+                            Edit
+                          </button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <Typography>No rooms planned yet.</Typography>
+              )}
+              <Typography mt={1} variant="body2">
+                Unseated students: {unseated}
+              </Typography>
+            </Box>
+          )}
+
+          {tabIndex === 1 && (
             <Box mt={2}>
               {teachers.length > 0 ? (
                 <Table size="small">
@@ -130,7 +203,7 @@ const SeatPlan = () => {
             </Box>
           )}
 
-          {tabIndex === 1 && (
+          {tabIndex === 2 && (
             <Box mt={2}>
               {students.length > 0 ? (
                 <Table size="small">

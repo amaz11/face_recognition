@@ -73,7 +73,7 @@ const UpdateTeacher = ({ id, row }: { id: any, row: any }) => {
                 if (numberPatterMatch && value.length === 11) {
                     setFormErrorData((prev: any) => ({
                         ...prev,
-                        phone_no: "",
+                        phone: "",
                     }));
                 } else if (
                     numberPatterMatch &&
@@ -81,12 +81,12 @@ const UpdateTeacher = ({ id, row }: { id: any, row: any }) => {
                 ) {
                     setFormErrorData((prev: any) => ({
                         ...prev,
-                        phone_no: "Please provide 11 digit phone number.",
+                        phone: "Please provide 11 digit phone number.",
                     }));
                 } else {
                     setFormErrorData((prev: any) => ({
                         ...prev,
-                        phone_no: "Please provide numeric number.",
+                        phone: "Please provide numeric number.",
                     }));
                 }
                 break;

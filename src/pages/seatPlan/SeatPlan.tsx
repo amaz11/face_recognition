@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import PageHeader from "../../Components/PageHeader";
+import EditSeatPlanRooms from "./EditSeatPlanRooms";
 
 const SeatPlan = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -271,6 +272,7 @@ const SeatPlan = () => {
           columns={columns}
           isLoading={isLoading}
           isFetching={isFetching}
+          UpdateList={EditSeatPlanRooms}
           endpoint="admin/seat-plan"
           tags={["seat-plan"]}
           refetch={refetch}
